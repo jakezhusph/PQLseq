@@ -17,10 +17,10 @@ pqlseq <- function(RawCountDataSet, Phenotypes, Covariates=NULL, RelatednessMatr
 		if(numCore>detectCores()){warning("PQLseq:: the number of cores you're setting is larger than detected cores!");numCore = detectCores()-1}
 	}
 
-	registerDoParallel(numCore)
+	# registerDoParallel(numCore)
 
-	# cl <- makeCluster(numCore)
-	# registerDoParallel(cl,cores=numCore)
+	cl <- makeCluster(numCore)
+	registerDoParallel(cl,cores=numCore)
 	# on.exit(stopCluster(cl))
 	
 	# filtering genes/sites
@@ -139,8 +139,12 @@ pqlseq <- function(RawCountDataSet, Phenotypes, Covariates=NULL, RelatednessMatr
 							  converged = converged) 
 		}# end for iVar, parallel
 		rm(iVar)
-		closeAllConnections()
+		# closeAllConnections()
 		# if(nrow(showConnections())!=0){closeAllConnections()}
+		# cons <- suppressWarnings(showConnections(all = TRUE))
+		# rm(cons)
+
+		parallel::stopCluster(cl)
 
 		rownames(resPMM) <- rownames(CountData)
 		return(resPMM)
@@ -241,7 +245,12 @@ pqlseq <- function(RawCountDataSet, Phenotypes, Covariates=NULL, RelatednessMatr
 		rm(iVar)
 
 		# if(nrow(showConnections())!=0){closeAllConnections()}
-		closeAllConnections()
+		# closeAllConnections()
+		# cons <- suppressWarnings(showConnections(all = TRUE))
+		# rm(cons)
+
+		parallel::stopCluster(cl)
+
 		rownames(resBMM) <- rownames(CountData)
 		return(resBMM)
 	}# end BMM

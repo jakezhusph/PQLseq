@@ -1,11 +1,11 @@
-ada48ff15e838112fce6c3fc5d7d01a7 *DESCRIPTION
+0275b15b127eb35da17bdc501b93a3d0 *DESCRIPTION
 eb48451210d8d4a77cf822882efad4de *NAMESPACE
-21934dfaf9a5a553abb2a06996292ca9 *R/PQLseq.R
+d54f5d01b8e5e3f754138e48d4621768 *R/PQLseq.R
 cac46415555dc34adaa8a5dc1244d16f *R/RcppExports.R
 a7b870f7c2c7d2ff57c67066e227bade *R/hello.R
-240d2d79b847b34b2da568d2ee1e1457 *build/partial.rdb
-f009b9aea41e81830a9bbec37ac8fcc2 *data/ExampleBSseq.rda
-8ec3653c815e9a51655f913c9eca3da5 *data/ExampleRNAseq.rda
+1394b973ab6b7b7ae43d5c129c853f9c *build/partial.rdb
+9c5b837ec6f984f26fddef5937a7248c *data/ExampleBSseq.rda
+7f9374be9bcccd204a00d27c05617609 *data/ExampleRNAseq.rda
 a1545860294447c3bce4551413462f24 *data/datalist
 23178196bcbe67cad9f663a7b3e0d06f *inst/COPYRIGHTS
 6bd401b2d9af533981487c92e2c7d6dc *man/ExampleBSseq.Rd
