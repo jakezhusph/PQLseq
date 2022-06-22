@@ -84,4 +84,5 @@ detach(ExampleRNAseq)
 }
 
 \keyword{function}
-\keyword{GLMMs, pqlseq}
+\concept{GLMMs}
+\concept{pqlseq}

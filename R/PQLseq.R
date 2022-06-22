@@ -1,10 +1,10 @@
 ########################################################################################################################
 # Package: PQLseq
-# Version: 1.1
-# Date   : 2018-08-05
+# Version: 1.2
+# Date   : 2020-05-01
 # Title  : Heritability Estimation and Differential Analysis with Generalized Linear Mixed Models in Large-Scale Genomic Sequencing Studies
 # Authors: Shiquan Sun, Jiaqiang Zhu, and Xiang Zhou
-# Contact: shiquans@umich.edu and jiaqiang@umich.edu 
+# Contact: jiaqiang@umich.edu 
 #          University of Michigan, Department of Biostatistics
 ########################################################################################################################
 
@@ -17,10 +17,10 @@ pqlseq <- function(RawCountDataSet, Phenotypes, Covariates=NULL, RelatednessMatr
 		if(numCore>detectCores()){warning("PQLseq:: the number of cores you're setting is larger than detected cores!");numCore = detectCores()-1}
 	}
 
-	registerDoParallel(numCore)
+	# registerDoParallel(numCore)
 
-	# cl <- makeCluster(numCore)
-	# registerDoParallel(cl,cores=numCore)
+	cl <- makeCluster(numCore)
+	registerDoParallel(cl,cores=numCore)
 	# on.exit(stopCluster(cl))
 	
 	# filtering genes/sites
@@ -106,7 +106,7 @@ pqlseq <- function(RawCountDataSet, Phenotypes, Covariates=NULL, RelatednessMatr
 			if(verbose) {cat(paste("NO. Gene = ",iVar,"\n"))}
     
 			tmpRelatednessMatrix <- RelatednessMatrix
-			if(class(tmpRelatednessMatrix) == "matrix") {
+			if(is(tmpRelatednessMatrix,"matrix")) {
 				tmpRelatednessMatrix <- tmpRelatednessMatrix[idx, idx]
 			}else {
 				for(ik in seq_len(length(tmpRelatednessMatrix)) ) {tmpRelatednessMatrix[[ik]] <- tmpRelatednessMatrix[[ik]][idx, idx]}
@@ -139,8 +139,12 @@ pqlseq <- function(RawCountDataSet, Phenotypes, Covariates=NULL, RelatednessMatr
 							  converged = converged) 
 		}# end for iVar, parallel
 		rm(iVar)
-		closeAllConnections()
+		# closeAllConnections()
 		# if(nrow(showConnections())!=0){closeAllConnections()}
+		# cons <- suppressWarnings(showConnections(all = TRUE))
+		# rm(cons)
+
+		parallel::stopCluster(cl)
 
 		rownames(resPMM) <- rownames(CountData)
 		return(resPMM)
@@ -207,7 +211,7 @@ pqlseq <- function(RawCountDataSet, Phenotypes, Covariates=NULL, RelatednessMatr
 			if(!redflag){
       
 				tmpRelatednessMatrix <- RelatednessMatrix
-				if(class(tmpRelatednessMatrix) == "matrix") {
+				if(is(tmpRelatednessMatrix,"matrix")) {
 					tmpRelatednessMatrix <- tmpRelatednessMatrix[idx, idx]
 				}else {
 					for(ik in seq_len(length(tmpRelatednessMatrix)) ) {
@@ -241,7 +245,12 @@ pqlseq <- function(RawCountDataSet, Phenotypes, Covariates=NULL, RelatednessMatr
 		rm(iVar)
 
 		# if(nrow(showConnections())!=0){closeAllConnections()}
-		closeAllConnections()
+		# closeAllConnections()
+		# cons <- suppressWarnings(showConnections(all = TRUE))
+		# rm(cons)
+
+		parallel::stopCluster(cl)
+
 		rownames(resBMM) <- rownames(CountData)
 		return(resBMM)
 	}# end BMM
@@ -324,7 +333,7 @@ PQLseq.AI <- function(model0, RelatednessMatrix, tau = rep(0, length(Relatedness
 
 		P <- try(Hinv - tcrossprod(tcrossprod(HinvX, chol2inv(chol( XHinvX ))), HinvX))
 	
-		if(class(P) == "try-error"){
+		if(is(P,"try-error")){
 			stop("Error in P matrix calculation!")
 		}
 
